@@ -1,0 +1,59 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  labels:
+    app: tensorboard
+  name: tensorboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tensorboard
+  template:
+    metadata:
+      labels:
+        app: tensorboard
+    spec:
+      containers:
+        - name: tensorboard
+          image: tensorflow/tensorflow:latest
+          command: ["tensorboard"]
+          args: ["--bind_all", "--logdir", "/logs"]
+          ports:
+            - containerPort: 6006
+          volumeMounts:
+            - name: tensorboard-logs
+              mountPath: /logs
+      volumes:
+        - name: tensorboard-logs
+          persistentVolumeClaim:
+            claimName: shared
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tensorboard
+spec:
+  selector:
+    app: tensorboard
+  ports:
+    - name: ui
+      protocol: TCP
+      port: 6006
+      targetPort: 6006
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: tensorboard
+spec:
+  to:
+    kind: Service
+    name: tensorboard
+  port:
+    targetPort: ui
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+---
