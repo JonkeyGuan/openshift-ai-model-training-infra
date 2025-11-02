@@ -14,5 +14,5 @@ the OpenShift AI Model Registry with DB and Server, depends on model storage
 
 ### tensorboard
 
-# setup tensorboard as standard depolyment with ingress, depends on efs model training logs
+setup tensorboard as standard depolyment with ingress, depends on efs model training logs
 
