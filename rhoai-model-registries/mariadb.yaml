@@ -54,7 +54,7 @@ spec:
             - name: mariadb
               mountPath: /var/lib/mysql
           terminationMessagePolicy: File
-          image: 'mariadb:lts-ubi10'
+          image: 'mariadb:12.0.2-ubi10'
       restartPolicy: Always
       terminationGracePeriodSeconds: 10
       dnsPolicy: ClusterFirst
